@@ -29,9 +29,13 @@ enum class TokenType {
     // Signos de puntuación
     COMMA,      // ,
     SEMICOLON,  // ;
+    STAR,
 
     // No quedan más caracteres
-    END_OF_FILE
+    END_OF_FILE,
+
+    //Error lexico
+    ERROR
 };
 
 // Un token guarda su tipo, el texto original (lexema) y dónde empieza
@@ -40,6 +44,7 @@ struct Token {
     std::string lexeme;
     int line;
     int column;
+    std::string message; 
 };
 
 // Convierte el tipo a texto para poder imprimirlo
@@ -62,7 +67,9 @@ inline std::string tokenTypeToString(TokenType type) {
         case TokenType::GREATER_EQUAL: return "GREATER_EQUAL";
         case TokenType::COMMA:         return "COMMA";
         case TokenType::SEMICOLON:     return "SEMICOLON";
+        case TokenType::STAR:          return "STAR";
         case TokenType::END_OF_FILE:   return "END_OF_FILE";
+        case TokenType::ERROR:         return "ERROR";
     }
     return "UNKNOWN";
 }
