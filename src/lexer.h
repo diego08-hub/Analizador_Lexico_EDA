@@ -5,12 +5,14 @@
 
 class Lexer {
 public:
-    Lexer(const std::string& source);
+    explicit Lexer(const std::string& source);
 
-    // Recorre toda la entrada y devuelve los tokens (el último es END_OF_FILE)
+    // Recorre toda la entrada y devuelve los tokens.
+    // El último siempre es END_OF_FILE. Los errores léxicos aparecen
+    // en la secuencia como tokens de tipo ERROR (con su mensaje).
     std::vector<Token> tokenize();
 
-    // Mensajes de los errores léxicos encontrados
+    // Mensajes de los errores léxicos encontrados (formato legible)
     const std::vector<std::string>& getErrors() const;
 
 private:
@@ -37,5 +39,6 @@ private:
 
     // Ayudas para guardar tokens y errores
     void addToken(TokenType type, const std::string& lexeme, int startLine, int startColumn);
-    void addError(const std::string& message, int startLine, int startColumn);
+    void addError(const std::string& message, const std::string& lexeme,
+                  int startLine, int startColumn);
 };

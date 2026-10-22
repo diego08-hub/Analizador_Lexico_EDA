@@ -41,6 +41,13 @@ char Lexer::advance() {
 // ---------- Programa principal del lexer ----------
 
 std::vector<Token> Lexer::tokenize() {
+    // Se reinicia el estado: se puede llamar más de una vez sin duplicar tokens
+    tokens.clear();
+    errors.clear();
+    pos = 0;
+    line = 1;
+    column = 1;
+
     while (true) {
         skipWhitespace();
         if (isAtEnd()) break;
@@ -83,18 +90,8 @@ void Lexer::readIdentifier(int startLine, int startColumn) {
         text += advance();
     }
 
-    // Se busca en minúscula para que SELECT, select y Select sean iguales
-    std::string lower;
-    for (char c : text) {
-        lower += (char)std::tolower((unsigned char)c);
-    }
-
-    auto found = KEYWORDS.find(lower);
-    if (found != KEYWORDS.end()) {
-        addToken(found->second, text, startLine, startColumn);
-    } else {
-        addToken(TokenType::IDENTIFIER, text, startLine, startColumn);
-    }
+    // lookupKeyword ignora mayúsculas/minúsculas; el lexema no se modifica
+    addToken(lookupKeyword(text), text, startLine, startColumn);
 }
 
 // Lee un entero (18) o un decimal (3.14)
@@ -108,7 +105,8 @@ void Lexer::readNumber(int startLine, int startColumn) {
     if (peek() == '.') {
         if (!std::isdigit((unsigned char)peekNext())) {
             text += advance();  // consume el punto para no leerlo dos veces
-            addError("número decimal mal formado '" + text + "'", startLine, startColumn);
+            addError("número decimal mal formado '" + text + "'",
+                     text, startLine, startColumn);
             return;
         }
         text += advance();  // el punto
@@ -123,6 +121,7 @@ void Lexer::readNumber(int startLine, int startColumn) {
 }
 
 // Lee una cadena entre comillas simples: 'hola'
+// El lexema incluye las comillas. No se permiten saltos de línea dentro.
 void Lexer::readString(int startLine, int startColumn) {
     std::string text;
     text += advance();  // la comilla de apertura
@@ -133,7 +132,7 @@ void Lexer::readString(int startLine, int startColumn) {
 
     // Si no encontramos la comilla de cierre, es un error
     if (peek() != '\'') {
-        addError("cadena sin cerrar", startLine, startColumn);
+        addError("cadena sin cerrar", text, startLine, startColumn);
         return;
     }
 
@@ -141,13 +140,14 @@ void Lexer::readString(int startLine, int startColumn) {
     addToken(TokenType::STRING, text, startLine, startColumn);
 }
 
-// Lee operadores, comas, punto y coma. Si no reconoce el carácter, es error
+// Lee operadores, puntuación. Si no reconoce el carácter, es error
 void Lexer::readSymbol(int startLine, int startColumn) {
     char c = advance();
 
     switch (c) {
         case ',': addToken(TokenType::COMMA, ",", startLine, startColumn); break;
         case ';': addToken(TokenType::SEMICOLON, ";", startLine, startColumn); break;
+        case '*': addToken(TokenType::STAR, "*", startLine, startColumn); break;
         case '=': addToken(TokenType::EQUAL, "=", startLine, startColumn); break;
 
         // Los operadores de dos caracteres se revisan mirando el siguiente
@@ -177,12 +177,13 @@ void Lexer::readSymbol(int startLine, int startColumn) {
                 advance();
                 addToken(TokenType::NOT_EQUAL, "!=", startLine, startColumn);
             } else {
-                addError("carácter no válido '!'", startLine, startColumn);
+                addError("carácter no válido '!'", "!", startLine, startColumn);
             }
             break;
 
         default:
-            addError(std::string("carácter no válido '") + c + "'", startLine, startColumn);
+            addError(std::string("carácter no válido '") + c + "'",
+                     std::string(1, c), startLine, startColumn);
             break;
     }
 }
@@ -190,10 +191,14 @@ void Lexer::readSymbol(int startLine, int startColumn) {
 // ---------- Ayudas ----------
 
 void Lexer::addToken(TokenType type, const std::string& lexeme, int startLine, int startColumn) {
-    tokens.push_back(Token{type, lexeme, startLine, startColumn});
+    tokens.push_back(Token{type, lexeme, startLine, startColumn, ""});
 }
 
-void Lexer::addError(const std::string& message, int startLine, int startColumn) {
+// Guarda el error en dos lugares: como mensaje legible y como token ERROR
+// (así el analizador sintáctico sabe en qué punto de la entrada ocurrió)
+void Lexer::addError(const std::string& message, const std::string& lexeme,
+                     int startLine, int startColumn) {
     errors.push_back("Error léxico en línea " + std::to_string(startLine) +
                      ", columna " + std::to_string(startColumn) + ": " + message);
+    tokens.push_back(Token{TokenType::ERROR, lexeme, startLine, startColumn, message});
 }
