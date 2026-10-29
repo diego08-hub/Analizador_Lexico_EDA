@@ -8,7 +8,7 @@ test_lexer: tests/test_lexer.cpp src/lexer.cpp src/lexer.h src/token.h src/keywo
 	$(CXX) $(CXXFLAGS) tests/test_lexer.cpp src/lexer.cpp -o test_lexer
 
 test: test_lexer
-	./test_lexer
+	./test_lexer docs/Reporte_Pruebas.md
 
 clean:
 	rm -f lexer test_lexer
