@@ -60,9 +60,11 @@ static void check(bool cond, const std::string& name) {
     std::string errs;
     for (const std::string& e : ctxErrors) errs += (errs.empty() ? "" : "<br>") + e;
     records.push_back({currentSection, name, ctxInput, describe(ctxToks), errs, cond});
-    std::cout << (cond ? "  [OK]    " : "  [FALLO] ") << name << "\n"
-              << "          entrada: \"" << escape(ctxInput) << "\"\n"
-              << "          tokens:  " << describe(ctxToks) << "\n";
+    std::cout << (cond ? "  [OK]    " : "  [FALLO] ") << name << "\n";
+    if (!cond) {
+        std::cout << "          entrada: \"" << escape(ctxInput) << "\"\n"
+                  << "          tokens:  " << describe(ctxToks) << "\n";
+    }
 }
 
 // Verifica que los tipos de token coincidan exactamente (incluye END_OF_FILE al final)
@@ -236,7 +238,8 @@ int main(int argc, char* argv[]) {
 
     std::string reportPath = argc > 1 ? argv[1] : "reporte_pruebas.md";
     writeReport(reportPath);
-    std::cout << "\nReporte generado en: " << reportPath << "\n";
-    std::cout << "\nResultado: " << passed << " pruebas OK, " << failed << " fallidas\n";
+    std::cout << "\nResultado: " << passed << " pruebas OK, " << failed << " fallidas\n"
+              << "Se generó el reporte con consultas y tokens en: " << reportPath << "\n"
+              << "Revísalo para ver el detalle de cada prueba.\n";
     return failed == 0 ? 0 : 1;
 }
