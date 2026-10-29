@@ -57,6 +57,5 @@ int main(int argc, char* argv[]) {
             std::cout << "  " << e << "\n";
         }
     }
-
     return 0;
-}echo "SELECT @a FROM t;" | ./lexer
+}
