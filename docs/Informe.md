@@ -35,7 +35,7 @@ Ver la tabla completa y las reglas léxicas (mayúsculas/minúsculas, identifica
 Los errores léxicos (carácter no válido, cadena sin cerrar, decimal mal formado) generan un token `ERROR` en el lugar donde ocurren y un mensaje `Error léxico en línea L, columna C: …`. Nunca se clasifican como tokens válidos y el análisis continúa, de modo que se reportan todos los errores en una pasada.
 
 ## 5. Pruebas y resultados
-Ejecución: `make test`. Resultado: **46 pruebas OK, 0 fallidas**.
+Ejecución: `make test`. Resultado: **46 pruebas OK, 0 fallidas**. El detalle de cada prueba (consulta, tokens encontrados y errores) se genera automáticamente en [Reporte_Pruebas.md](Reporte_Pruebas.md).
 
 | # | Escenario | Casos verificados |
 |---|---|---|

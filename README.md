@@ -36,7 +36,7 @@ La posición es `línea:columna`, ambas empezando en 1. Los errores léxicos se 
 | [src/keywords.h](src/keywords.h) | Tabla de palabras reservadas |
 | [src/lexer.h](src/lexer.h), [src/lexer.cpp](src/lexer.cpp) | Reconocedor léxico (clase `Lexer`) |
 | [src/main.cpp](src/main.cpp) | Lectura de entrada e interfaz de salida |
-| [tests/test_lexer.cpp](tests/test_lexer.cpp) | Pruebas unitarias |
+| [tests/test_lexer.cpp](tests/test_lexer.cpp) | Pruebas unitarias y generación del reporte |
 
 ### Uso desde otro módulo (p. ej. el parser)
 
@@ -92,4 +92,10 @@ Un error nunca se clasifica como token válido. Se emite un token `ERROR` en el 
 
 ## Pruebas
 
-`make test` ejecuta 46 comprobaciones agrupadas en los 7 escenarios del laboratorio: sentencia válida, operadores compuestos, literales, palabras reservadas vs. identificadores, espacios en blanco, errores léxicos y casos límite (entrada vacía, sentencias incompletas, tokens al final de la entrada).
+```bash
+make test
+```
+
+Compila y ejecuta 46 comprobaciones agrupadas en los 7 escenarios del laboratorio: sentencia válida, operadores compuestos, literales, palabras reservadas vs. identificadores, espacios en blanco, errores léxicos y casos límite (entrada vacía, sentencias incompletas, tokens al final de la entrada).
+
+En consola muestra cada prueba como `[OK]` o `[FALLO]` y un resumen. Además **genera el reporte [docs/Reporte_Pruebas.md](docs/Reporte_Pruebas.md)**, con una tabla por escenario que indica, para cada prueba, la consulta de entrada, los tokens encontrados (`TIPO(lexema)@línea:columna`), los errores léxicos reportados y el resultado. Se regenera en cada ejecución y sirve como evidencia de lo que se probó.
