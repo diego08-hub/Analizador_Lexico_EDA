@@ -1,7 +1,7 @@
 # Informe – Laboratorio 4: Analizador Léxico SQL
 
 **Curso:** Estructuras de Datos Avanzadas · **Lenguaje:** C++17
-**Integrantes:** _(completar con los nombres del equipo)_
+**Integrantes:** Diego Canqui Ecos, Diego Mauricio Villanueva Flores
 **Repositorio:** https://github.com/diego08-hub/Analizador_Lexico_EDA
 
 ## 1. Introducción

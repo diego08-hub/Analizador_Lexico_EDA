@@ -2,6 +2,11 @@
 
 Primera parte de la Fase 2 del proyecto de servidor de base de datos (curso Estructuras de Datos Avanzadas, Laboratorio 4). Convierte una sentencia `SELECT` en una secuencia ordenada de tokens, lista para el analizador sintáctico. No ejecuta consultas ni valida que existan tablas o columnas.
 
+## Integrantes
+
+- Diego Canqui Ecos
+- Diego Mauricio Villanueva Flores
+
 ## Compilar, ejecutar y probar
 
 Requiere `g++` con soporte C++17 y `make`.
