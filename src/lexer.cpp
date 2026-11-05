@@ -148,6 +148,11 @@ void Lexer::readSymbol(int startLine, int startColumn) {
         case ',': addToken(TokenType::COMMA, ",", startLine, startColumn); break;
         case ';': addToken(TokenType::SEMICOLON, ";", startLine, startColumn); break;
         case '*': addToken(TokenType::STAR, "*", startLine, startColumn); break;
+        case '+': addToken(TokenType::PLUS, "+", startLine, startColumn); break;
+        case '-': addToken(TokenType::MINUS, "-", startLine, startColumn); break;
+        case '/': addToken(TokenType::SLASH, "/", startLine, startColumn); break;
+        case '(': addToken(TokenType::LPAREN, "(", startLine, startColumn); break;
+        case ')': addToken(TokenType::RPAREN, ")", startLine, startColumn); break;
         case '=': addToken(TokenType::EQUAL, "=", startLine, startColumn); break;
 
         // Los operadores de dos caracteres se revisan mirando el siguiente

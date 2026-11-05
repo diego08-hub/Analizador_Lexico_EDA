@@ -26,10 +26,15 @@ enum class TokenType {
     LESS_EQUAL,    // <=
     GREATER_EQUAL, // >=
 
-    // Signos de puntuación
+    // Signos de puntuación y operadores aritméticos
     COMMA,      // ,
     SEMICOLON,  // ;
-    STAR,
+    STAR,       // *
+    PLUS,       // +
+    MINUS,      // -
+    SLASH,      // /
+    LPAREN,     // (
+    RPAREN,     // )
 
     // No quedan más caracteres
     END_OF_FILE,
@@ -68,6 +73,11 @@ inline std::string tokenTypeToString(TokenType type) {
         case TokenType::COMMA:         return "COMMA";
         case TokenType::SEMICOLON:     return "SEMICOLON";
         case TokenType::STAR:          return "STAR";
+        case TokenType::PLUS:          return "PLUS";
+        case TokenType::MINUS:         return "MINUS";
+        case TokenType::SLASH:         return "SLASH";
+        case TokenType::LPAREN:        return "LPAREN";
+        case TokenType::RPAREN:        return "RPAREN";
         case TokenType::END_OF_FILE:   return "END_OF_FILE";
         case TokenType::ERROR:         return "ERROR";
     }
