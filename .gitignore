@@ -1,2 +1,5 @@
 lexer
 test_lexer
+parser_cli
+test_parser
+*.o
