@@ -1,6 +1,8 @@
-# Analizador Léxico SQL (C++)
+# Analizador Léxico y Sintáctico Predictivo LL(1) SQL (C++)
 
-Primera parte de la Fase 2 del proyecto de servidor de base de datos (curso Estructuras de Datos Avanzadas, Laboratorio 4). Convierte una sentencia `SELECT` en una secuencia ordenada de tokens, lista para el analizador sintáctico. No ejecuta consultas ni valida que existan tablas o columnas.
+Fase 2 del proyecto de servidor de base de datos (curso Estructuras de Datos Avanzadas):
+- **Laboratorio 4:** Analizador Léxico (scanner de tokens).
+- **Laboratorio 5:** Analizador Sintáctico Predictivo No Recursivo LL(1) basado en pila.
 
 ## Integrantes
 
@@ -12,36 +14,41 @@ Primera parte de la Fase 2 del proyecto de servidor de base de datos (curso Estr
 Requiere `g++` con soporte C++17 y `make`.
 
 ```bash
-make              # compila el ejecutable ./lexer
-make test         # compila y corre las pruebas (./test_lexer)
-make clean        # borra los binarios
-
-./lexer consulta.sql                      # lee desde un archivo
-echo "SELECT a FROM t WHERE x >= 1.5;" | ./lexer   # lee desde la entrada estándar
+make all          # compila ./lexer, ./parser_cli, ./test_lexer y ./test_parser
+make test         # compila y corre ambas suites de pruebas (46 léxicas + 30 sintácticas)
+make clean        # borra los binarios generados
 ```
 
-Salida de ejemplo:
-
-```
-TIPO            LEXEMA              POSICIÓN
-SELECT_KW       "SELECT"            1:1
-IDENTIFIER      "a"                 1:8
-FROM_KW         "FROM"              1:10
-...
-END_OF_FILE     ""                  1:31
+### Ejecutar Analizador Léxico (Práctica 4)
+```bash
+./lexer consulta.sql                              # lee desde un archivo
+echo "SELECT a FROM t WHERE x >= 1.5;" | ./lexer  # lee desde la entrada estándar
 ```
 
-La posición es `línea:columna`, ambas empezando en 1. Los errores léxicos se listan además al final.
+### Ejecutar Analizador Sintáctico LL(1) (Práctica 5)
+```bash
+./parser_cli consulta.sql       # analiza y muestra la traza de la pila paso a paso
+./parser_cli                    # inicia modo interactivo por consola (SQL> ...)
+./parser_cli --table            # visualiza la lista de producciones y reglas registradas
+```
 
-## Estructura
+## Estructura del Proyecto
 
-| Archivo | Responsabilidad |
+| Archivo / Carpeta | Responsabilidad |
 |---|---|
 | [src/token.h](src/token.h) | Modelo de tokens: `TokenType`, `Token` (tipo, lexema, línea, columna, mensaje) |
-| [src/keywords.h](src/keywords.h) | Tabla de palabras reservadas |
+| [src/keywords.h](src/keywords.h) | Tabla hash de palabras reservadas |
 | [src/lexer.h](src/lexer.h), [src/lexer.cpp](src/lexer.cpp) | Reconocedor léxico (clase `Lexer`) |
-| [src/main.cpp](src/main.cpp) | Lectura de entrada e interfaz de salida |
-| [tests/test_lexer.cpp](tests/test_lexer.cpp) | Pruebas unitarias y generación del reporte |
+| [src/main.cpp](src/main.cpp) | Punto de entrada del analizador léxico |
+| [parser_ll1/types.h](parser_ll1/types.h) | Símbolos terminales/no terminales, producciones y errores |
+| [parser_ll1/parse_table.h](parser_ll1/parse_table.h), [parse_table.cpp](parser_ll1/parse_table.cpp) | Matriz de Parseo LL(1) $M[A, a]$ y reglas gramaticales |
+| [parser_ll1/tracer.h](parser_ll1/tracer.h) | Trazador formateador de la pila, entrada restante y acciones |
+| [parser_ll1/parser.h](parser_ll1/parser.h), [parser.cpp](parser_ll1/parser.cpp) | Motor LL(1) iterativo basado en pila (`std::vector<Symbol>`) |
+| [parser_ll1/main.cpp](parser_ll1/main.cpp) | CLI interactivo y analizador de archivos para el parser |
+| [tests/test_lexer.cpp](tests/test_lexer.cpp) | Batería de 46 pruebas léxicas y generación de reporte |
+| [tests/test_parser.cpp](tests/test_parser.cpp) | Batería de 30 pruebas sintácticas (válidas, complejas e inválidas) |
+| [docs/Reporte_Pruebas.md](docs/Reporte_Pruebas.md) | Evidencia de ejecución de pruebas léxicas |
+| [docs/Reporte_Pruebas_Parser.md](docs/Reporte_Pruebas_Parser.md) | Evidencia y traza paso a paso de pruebas sintácticas |
 
 ### Uso desde otro módulo (p. ej. el parser)
 
