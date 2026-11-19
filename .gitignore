@@ -2,4 +2,8 @@ lexer
 test_lexer
 parser_cli
 test_parser
+test_grammar
+semantic_cli
+test_semantic
+test_catalog
 *.o
