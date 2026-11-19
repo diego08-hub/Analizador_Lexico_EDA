@@ -17,7 +17,7 @@ GRAMMAR_HDRS = parser_ll1/grammar.h
 SEMANTIC_SRCS = semantic_analyzer/ast.cpp semantic_analyzer/catalog.cpp semantic_analyzer/ast_builder.cpp semantic_analyzer/semantic_analyzer.cpp
 SEMANTIC_HDRS = semantic_analyzer/semantic_types.h semantic_analyzer/ast.h semantic_analyzer/catalog.h semantic_analyzer/ast_builder.h semantic_analyzer/semantic_analyzer.h
 
-all: lexer parser_cli semantic_cli test_lexer test_grammar test_parser test_semantic
+all: lexer parser_cli semantic_cli test_lexer test_grammar test_parser test_semantic test_catalog
 
 lexer: src/main.cpp $(LEXER_SRCS) $(LEXER_HDRS)
 	$(CXX) $(CXXFLAGS) src/main.cpp $(LEXER_SRCS) -o lexer
@@ -40,13 +40,17 @@ test_parser: tests/test_parser.cpp $(PARSER_SRCS) $(LEXER_SRCS) $(PARSER_HDRS) $
 test_semantic: tests/test_semantic.cpp $(SEMANTIC_SRCS) $(PARSER_SRCS) $(LEXER_SRCS) $(SEMANTIC_HDRS) $(PARSER_HDRS) $(LEXER_HDRS)
 	$(CXX) $(CXXFLAGS) tests/test_semantic.cpp $(SEMANTIC_SRCS) $(PARSER_SRCS) $(LEXER_SRCS) -o test_semantic
 
-test: test_lexer test_grammar test_parser test_semantic
+test_catalog: tests/test_catalog.cpp semantic_analyzer/catalog.cpp semantic_analyzer/ast.cpp $(SEMANTIC_HDRS)
+	$(CXX) $(CXXFLAGS) tests/test_catalog.cpp semantic_analyzer/catalog.cpp semantic_analyzer/ast.cpp -o test_catalog
+
+test: test_lexer test_grammar test_parser test_semantic test_catalog
 	./test_lexer docs/Reporte_Pruebas.md
 	./test_grammar
 	./test_parser docs/Reporte_Pruebas_Parser.md
 	./test_semantic
+	./test_catalog
 
 clean:
-	rm -f lexer parser_cli semantic_cli test_lexer test_grammar test_parser test_semantic
+	rm -f lexer parser_cli semantic_cli test_lexer test_grammar test_parser test_semantic test_catalog
 
 .PHONY: all test clean

@@ -1,0 +1,16 @@
+table,storage_path,column,position,type,pk,nullable
+empleados,data/empleados.tbl,id,1,INT,true,false
+empleados,data/empleados.tbl,nombre,2,VARCHAR,false,false
+empleados,data/empleados.tbl,edad,3,INT,false,true
+empleados,data/empleados.tbl,salario,4,FLOAT,false,false
+empleados,data/empleados.tbl,activo,5,BOOLEAN,false,false
+empleados,data/empleados.tbl,departamento_id,6,INT,false,true
+departamentos,data/departamentos.tbl,id,1,INT,true,false
+departamentos,data/departamentos.tbl,nombre,2,VARCHAR,false,false
+departamentos,data/departamentos.tbl,presupuesto,3,FLOAT,false,false
+departamentos,data/departamentos.tbl,activo,4,BOOLEAN,false,false
+proyectos,data/proyectos.tbl,codigo,1,INT,true,false
+proyectos,data/proyectos.tbl,titulo,2,VARCHAR,false,false
+proyectos,data/proyectos.tbl,horas_estimadas,3,INT,false,true
+proyectos,data/proyectos.tbl,costo,4,FLOAT,false,false
+proyectos,data/proyectos.tbl,finalizado,5,BOOLEAN,false,false
